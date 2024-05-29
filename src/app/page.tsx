@@ -79,12 +79,12 @@ export default function Home() {
         <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-red-500">{error}</div>
         <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-gray-500">{error_message}</div>
       </>}
-      <section className="grid grid-cols-2">
+      <section className="grid grid-cols-2" style={{ direction: "rtl" }}>
         {posts.map((post: post) => (
-          <div key={post.postid} className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-gray-200">
-            <h2 className="text-2xl">{post.name}</h2>
+          <div key={post.postid} className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-gray-200" style={{ direction: 'ltr' }}>
+            <h2 className="text-3xl">{post.name}</h2>
             {post.departures.map((departure: departure, index) => (
-              <div key={"departure_" + departure.routeid + "_" + index} className="p-2 bg-white rounded-lg my-2 flex justify-between items-center">
+              <div key={"departure_" + departure.routeid + "_" + index} className="p-2 bg-white rounded-lg my-2 flex justify-between items-center text-xl">
                 <div className="px-2 bg-idsjmk-green rounded-sm text-white">{departure.linename}</div>
                 <div>{departure.finalstop}</div>
                 {// <div>{departure.islowfloor && <span>&#x267F;</span>}</div>
