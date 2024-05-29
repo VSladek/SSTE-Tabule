@@ -54,7 +54,7 @@ export default function Home() {
     setWarning(data["Warning"]);
     setError(data["Error"]);
     if (data["Error"]) {
-      setError_message(data["ErrorMessage"]);
+      setError_message(data["Message"]);
     }
     setLoading(false);
   }
