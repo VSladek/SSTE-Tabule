@@ -25,13 +25,21 @@ class post {
 export default function Home() {
   const stopid = "1455";
   const [loading, setLoading] = useState(true);
-  const timer = useRef(null);
+  const timer = useRef<NodeJS.Timeout | undefined>();
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [error_message, setError_message] = useState("");
   const [posts, setPosts] = useState<post[]>([]);
   const fetchData = async () => {
-    const response = await fetch('https://mapa.idsjmk.cz/api/departures?stopid=' + stopid);
+    const response = await fetch(
+      '/api/departures?stopid=' + stopid, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }
+    );
     const data = await response.json();
     // console.log(data);
     setPosts(() => data["PostList"].map((item: any) =>
@@ -74,7 +82,7 @@ export default function Home() {
   return (
     <main className="flex flex-col justify-between min-h-full bg-white text-black">
       {loading && <button onClick={sendlog} className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-blue-500">Loading...</button>}
-      {warning && <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-yellow-500">{warning}</div>}
+      {/*warning && <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-yellow-500">{warning}</div>*/}
       {error && <>
         <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-red-500">{error}</div>
         <div className="relative w-[calc(100%_-24px)] my-2 mx-3 p-5 rounded-lg bg-gray-500">{error_message}</div>
