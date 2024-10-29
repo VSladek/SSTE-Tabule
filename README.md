@@ -40,7 +40,8 @@ xhost +local:docker && \
 docker run -it --rm -e DISPLAY=$DISPLAY -e URL=$URL --volume /tmp/.X11-unix:/tmp/.X11-unix --device /dev/dri tabule
 ```
 
-> [!NOTE] The `xhost +local:docker` command is used to allow the docker container to access the X11 server.
+> [!NOTE]
+> The `xhost +local:docker` command is used to allow the docker container to access the X11 server.
 > For Revoking the access, use `xhost -local:docker`.
 
 ### Wayland
@@ -61,7 +62,8 @@ xhost +local:docker && \
 docker run --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix tabule
 ```
 
-> [!NOTE] The `xhost +local:docker` command is used to allow the docker container to access the X11 server.
+> [!NOTE]
+> The `xhost +local:docker` command is used to allow the docker container to access the X11 server.
 > For Revoking the access, use `xhost -local:docker`.
 
 ### Wayland
