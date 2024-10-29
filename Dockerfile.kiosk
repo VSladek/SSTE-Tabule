@@ -1,15 +1,9 @@
-# Use the official Alpine Linux image as a base
 FROM alpine:latest
 
-# Install necessary packages: Firefox, Openbox (optional), and D-Bus
-RUN apk update && \
-    apk add firefox dbus openbox ttf-dejavu curl
+RUN apk update && apk add firefox dbus openbox ttf-dejavu curl
 
-# Create an .xinitrc file to start the Openbox session
 RUN echo "exec openbox-session" > /root/.xinitrc
 
-# Set the default URL variable
 ENV URL=http://mc.wakinyan.eu:2568
 
-# Default command for X11
 CMD ["sh", "-c", "openbox & firefox --kiosk $URL"]

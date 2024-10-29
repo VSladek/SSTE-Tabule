@@ -1,21 +1,16 @@
-# Use Alpine as the base image
 FROM alpine:latest
 
-# Install necessary packages for Firefox and NGINX
-RUN apk update && \
-    apk add --no-cache firefox dbus ttf-freefont nginx
+RUN apk update && apk add firefox dbus openbox ttf-dejavu curl nginx
 
-# Copy website files to be served by NGINX
-# Create a directory for HTML files and add your content
 RUN mkdir -p /usr/share/nginx/html
-COPY ./out /usr/share/nginx/html
 
-# Configure NGINX to serve files from /usr/share/nginx/html
+COPY ./out /usr/share/nginx/html/
+
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Set environment variables for the display
-ENV DISPLAY=:99
+RUN echo "exec openbox-session" > /root/.xinitrc
 
-# Start NGINX and open Firefox with specified window size
-CMD ["/bin/sh", "-c", "nginx && firefox -kiosk http://localhost"]
+ENV URL=http://localhost
+
+CMD ["/bin/sh", "-c", "nginx & openbox & firefox -kiosk $URL"]
 
