@@ -2,6 +2,12 @@
 
 This repositoray is a project for "Tabule" at SSTE school gate.
 
+!> [!WARNING]
+
+> This project isn't using public api, to not get ip blocked you need to ask JMK for permission to use their API.
+
+The JMK api endpoint is `https://mapa.idsjmk.cz/api/departures?stopid=ID` where `ID` is the ID of the stop.
+
 # The Board
 
 ## Dependencies
