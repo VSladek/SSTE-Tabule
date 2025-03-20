@@ -35,26 +35,6 @@ function stringToColor(
   return `hsl(${hash % 360}, ${saturation}%, ${lightness}%)`;
 }
 
-function FormattedTimeMark(timeMark: string) {
-  if (timeMark.includes(":")) {
-    const [hours, minutes] = timeMark.split(":");
-    return `${hours}:${minutes}`;
-  }
-  if (timeMark.includes("min")) {
-    const minutes = parseInt(timeMark);
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + minutes);
-    return date.toLocaleTimeString(["cs-CZ"], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
-  if (timeMark.includes("*")) {
-    return "Nyní";
-  }
-  return timeMark;
-}
-
 function FormattedName(name: string) {
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
   const directions = name.split(",");
@@ -150,7 +130,7 @@ export default function Home() {
       )}
       {posts && posts.length !== 0 && (
         <section
-          className="grid grid-cols-1 gap-2 h-full p-3"
+          className="grid grid-cols-1 gap-2 h-full p-3 justify-center items-center"
           style={{
             gridTemplateRows: `repeat(${posts.length}, minmax(0, 1fr))`,
           }}
@@ -187,9 +167,7 @@ export default function Home() {
                     <div className="text-left">{departure.FinalStop}</div>
                   </div>
                   <div className="place-self-end flex flex-row gap-10">
-                    <div className="text-right">
-                      {FormattedTimeMark(departure.TimeMark)}
-                    </div>
+                    <div className="text-right">{departure.TimeMark}</div>
                   </div>
                 </div>
               ))}
