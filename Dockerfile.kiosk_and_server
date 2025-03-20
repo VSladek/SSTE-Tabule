@@ -2,9 +2,6 @@ FROM alpine:latest
 
 RUN apk update && apk add firefox dbus openbox ttf-dejavu curl nginx
 
-RUN ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime && \
-    echo "Europe/Prague" > /etc/timezone
-
 RUN mkdir -p /usr/share/nginx/html
 
 COPY ./out /usr/share/nginx/html/
@@ -13,8 +10,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN echo "exec openbox-session" > /root/.xinitrc
 
-ENV URL=http://localhost
+ENV URL="http://127.0.0.1"
 
-RUN echo $URL
-
-CMD ["/bin/sh", "-c", "nginx & openbox & firefox --kiosk \"$URL\""]
+CMD ["/bin/sh", "-c", "nginx & openbox & firefox -kiosk \"$URL\""]
