@@ -5,6 +5,7 @@ import { Departure, DeparturePost } from "@/types/gtfs";
 import useGTFSStatic from "@/hooks/useGTFSStatic";
 import { useGTFS } from "@/hooks/useGTFS";
 import configData from "@/config/config.json";
+import { PHASE_DEVELOPMENT_SERVER } from "next/dist/shared/lib/constants";
 
 type configType = {
   stopId: string;
@@ -26,6 +27,7 @@ function stringToColor(
   return `hsl(${hash % 360}, ${saturation}%, ${lightness}%)`;
 }
 
+const URL = PHASE_DEVELOPMENT_SERVER ? "https://kordis-jmk.cz/gtfs" : "/gtfs";
 export default function Home() {
   const getStopId = () => {
     const config = configData as configType;
@@ -43,10 +45,10 @@ export default function Home() {
     error,
   } = useDepartures(
     getStopId(), // Pass the validated ID
-    useGTFSStatic("https://kordis-jmk.cz/gtfs/gtfs.zip"),
+    useGTFSStatic(`${URL}/gtfs.zip`),
     useGTFS(
       "https://raw.githubusercontent.com/google/transit/master/gtfs-realtime/proto/gtfs-realtime.proto",
-      "https://kordis-jmk.cz/gtfs/gtfsReal.dat",
+      `${URL}/gtfsReal.dat`,
       {
         refetchInterval: 30000,
       },
@@ -68,16 +70,17 @@ export default function Home() {
       )}
       {departures.Error || departures.Message || error ? (
         <div className="fixed w-[100vw] h-[100dvh] flex flex-col justify-center items-center text-xl">
-          (error || departures.Error && (
-          <div className="m-3 p-5 rounded-lg bg-red-500">
-            {departures.Error ||
-              (error instanceof Error ? error.message : error)}
-          </div>
-          ) (departures.Message && departures.Message.length !== 0) && (
-          <div className="m-3 p-5 rounded-lg bg-gray-400">
-            {departures.Message}
-          </div>
-          )
+          {(error || departures.Error) && (
+            <div className="m-3 p-5 rounded-lg bg-red-500">
+              {departures.Error ||
+                (error instanceof Error ? error.message : error)}
+            </div>
+          )}
+          {departures.Message && departures.Message.length !== 0 && (
+            <div className="m-3 p-5 rounded-lg bg-gray-400">
+              {departures.Message}
+            </div>
+          )}
         </div>
       ) : (
         <></>
