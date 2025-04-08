@@ -232,7 +232,7 @@ export interface StaticHookResult {
 
 export interface RealtimeHookResult {
   data: GTFSFeedMessage | null | undefined; // Allow undefined
-  loading: boolean; // Represents initial loading primarily
+  isLoading: boolean; // Represents initial loading primarily
   fetching?: boolean; // Optional: Represents any fetching state
   error: Error | string | null; // Allow Error object or string
   refetch: () => Promise<any>; // Use a more generic promise return for refetch

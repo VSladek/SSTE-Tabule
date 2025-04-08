@@ -23,11 +23,10 @@ import {
 import directions from "@/config/directions.json"; // Adjust path as needed
 
 type Directions = {
-    [stopId: string]: {
-        [directionId: string]: string;
-    };
+  [stopId: string]: {
+    [directionId: string]: string;
+  };
 };
-
 
 // --- Helper Functions ---
 const getSecondsSinceMidnight = (
@@ -134,6 +133,7 @@ const getSecsSinceMidnightFromTimestamp = (timestamp: number): number => {
 const defaultOptions: Required<UseDeparturesOptions> = {
   departuresPerPost: 5,
   timeWindowMinutes: 90,
+  refreshInterval: 30000, // 30 seconds
 };
 
 // Interface for the intermediate departure object during calculation
@@ -212,7 +212,7 @@ export const useDepartures = (
   } = staticDataResult;
   const {
     data: realtimeData,
-    loading: realtimeLoading,
+    isLoading: realtimeLoading,
     error: realtimeError,
   } = realtimeDataResult;
 
@@ -540,7 +540,7 @@ export const useDepartures = (
                 );
                 if (
                   stopTimeUpdate?.departure?.delay !== null &&
-                  stopTimeUpdate.departure.delay !== undefined
+                  stopTimeUpdate?.departure?.delay !== undefined
                 ) {
                   const parsedDelay = parseInt(
                     stopTimeUpdate.departure.delay,
@@ -566,9 +566,7 @@ export const useDepartures = (
               const isWithinWindow =
                 realtimeDepartureSecs >= timeWindowStart &&
                 realtimeDepartureSecs <= timeWindowEnd;
-              if (!isWithinWindow) {
-                skipCalculation = true;
-              } else {
+              if (isWithinWindow) {
                 // --- Departure is relevant ---
                 const platformStopInfo = stopsById[stopTime.stop_id];
                 const displayPlatform =
@@ -579,21 +577,21 @@ export const useDepartures = (
                 let groupingKey: string;
                 const directionId = trip.direction_id; // '0', '1', or undefined
 
-
                 // Look up direction name in config, using stopId from hook scope
-                const configuredDirectionName = directionId !== undefined
+                const configuredDirectionName =
+                  directionId !== undefined
                     ? (directions as Directions)[stopId]?.[directionId]
                     : undefined;
 
                 if (configuredDirectionName) {
-                    // Use the name from the config file
-                    groupingKey = configuredDirectionName;
+                  // Use the name from the config file
+                  groupingKey = configuredDirectionName;
                 } else if (directionId !== undefined) {
-                    // Fallback: Use the direction_id itself if no config found
-                    groupingKey = `Direction ${directionId}`;
+                  // Fallback: Use the direction_id itself if no config found
+                  groupingKey = `Direction ${directionId}`;
                 } else {
-                    // Ultimate fallback: Use headsign if direction_id is missing
-                    groupingKey = headsign;
+                  // Ultimate fallback: Use headsign if direction_id is missing
+                  groupingKey = headsign;
                 }
 
                 // Check for "**" display
@@ -718,7 +716,7 @@ export const useDepartures = (
     const { posts, error: calculationError } = calculateDeparturesCallback();
 
     // Update state based on the result
-    setDeparturesData((prevState) => {
+    setDeparturesData(() => {
       const identifierNum = stopId ? parseInt(stopId, 10) : null;
       const finalDisplayId =
         identifierNum === null || isNaN(identifierNum) ? null : identifierNum;
@@ -727,7 +725,7 @@ export const useDepartures = (
         StopID: finalDisplayId,
         Message: alerts, // Use latest calculated alerts
         PostList: calculationError ? [] : posts,
-        Error: finalError,
+        Error: finalError instanceof Error ? finalError.message : finalError,
       };
     });
     setIsCalculating(false); // Calculation finished

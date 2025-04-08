@@ -70,7 +70,8 @@ export default function Home() {
         <div className="fixed w-[100vw] h-[100dvh] flex flex-col justify-center items-center text-xl">
           (error || departures.Error && (
           <div className="m-3 p-5 rounded-lg bg-red-500">
-            {error || departures.Error}
+            {departures.Error ||
+              (error instanceof Error ? error.message : error)}
           </div>
           ) (departures.Message && departures.Message.length !== 0) && (
           <div className="m-3 p-5 rounded-lg bg-gray-400">
